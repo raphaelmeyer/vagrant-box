@@ -87,7 +87,20 @@ class VirtualBox:
       pass
     self._vboxmanage('modifyvm "{0}" --natpf1 "ssh,tcp,,{1},,22"'.format(self._name, ssh_port))
 
+  def wait_for_running(self):
+    count = 10
+    running = False
+    while count > 0:
+      if self._running():
+        running = True
+        break
+      time.sleep(1)
+      count = count -1
+    if not running:
+      raise Exception("Virtual box did not start.")
+
   def wait_for_started(self):
+    self.wait_for_running()
     count = 24
     running = False
     while count > 0:
@@ -99,6 +112,6 @@ class VirtualBox:
         time.sleep(5)
         count = count - 1
     if not running:
-      raise Exception("Virtual box did not start.")
+      raise Exception("Virtual box is not accessible.")
 
 
