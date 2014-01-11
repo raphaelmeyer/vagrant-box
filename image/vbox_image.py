@@ -13,7 +13,7 @@ class VBoxImage:
 
   def _install_ssh_key(self, ssh_port):
     ssh_public_key = os.path.join(self._config.script_dir, 'resources/vagrant.pub')
-    proc = subprocess.Popen(shlex.split('sshpass -p vagrant ssh-copy-id -i "{0}" "vagrant@localhost -p {1} -o StrictHostKeyChecking=no -oUserKnownHostsFile=/dev/null"'.format(ssh_public_key, ssh_port)), stdout=subprocess.PIPE, stdin=subprocess.PIPE)
+    proc = subprocess.Popen(shlex.split('sshpass -p vagrant ssh-copy-id -i "{0}" -p {1} -o StrictHostKeyChecking=no -oUserKnownHostsFile=/dev/null vagrant@localhost'.format(ssh_public_key, ssh_port)), stdout=subprocess.PIPE, stdin=subprocess.PIPE)
     out, err = proc.communicate()
     if proc.returncode is not 0:
       raise Exception(str(out) + '\n' + str(err))
