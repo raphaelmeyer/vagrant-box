@@ -1,0 +1,8 @@
+build
+vbox
+
+*.box
+
+*.pyc
+*.swp
+

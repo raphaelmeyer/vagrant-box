@@ -1,0 +1,17 @@
+{
+  "install_cd_url" : "http://releases.ubuntu.com/13.10/ubuntu-13.10-server-i386.iso",
+  "patches": [
+    "ks.cfg",
+    "isolinux/lang",
+    "isolinux/txt.cfg",
+    "isolinux/isolinux.cfg"
+  ],
+  "vbox" : {
+    "name" : "Ubuntu Server 13.10 Base Image",
+    "ostype" : "Ubuntu",
+    "memory" : 1024,
+    "vram" : 64,
+    "cpus" : 2
+  },
+  "vagrant_box" : "ubuntu-13.10-server-i386.box"
+}
