@@ -77,7 +77,7 @@ class VirtualBox:
 
   def wait_for_shutdown(self):
     while self._running():
-      print('.')
+      print('.', end="")
       time.sleep(5)
     print()
 
