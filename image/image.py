@@ -1,6 +1,6 @@
-from config import Config
-from install_cd import InstallCD
-from vbox_image import VBoxImage
+from image.config import Config
+from image.install_cd import InstallCD
+from image.vbox_image import VBoxImage
 
 class Image:
   def __init__(self, script_dir, config_file = 'config.json'):

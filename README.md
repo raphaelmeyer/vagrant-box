@@ -8,4 +8,5 @@ Requires:
 - virtualbox
 - vagrant
 - mkisofs
+- fuseiso
 

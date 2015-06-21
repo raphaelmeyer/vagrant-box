@@ -22,17 +22,17 @@ class VirtualBox:
     out = self._vboxmanage('list vms')
     regex = re.compile('^"{0}"'.format(self._name), re.MULTILINE)
     if regex.search(str(out)):
-      print 'Unregister vm "{0}"'.format(self._name)
+      print('Unregister vm "{0}"'.format(self._name))
       out = self._vboxmanage('unregistervm --delete "{0}"'.format(self._name))
     vm_path = os.path.join(self._basefolder, self._name)
     if os.path.isdir(vm_path):
-      print 'Delete "{0}"'.format(vm_path)
+      print('Delete "{0}"'.format(vm_path))
       shutil.rmtree(vm_path)
 
   def _running(self):
     out = self._vboxmanage('list runningvms')
     regex = re.compile('^"{0}"'.format(self._name), re.MULTILINE)
-    if regex.search(str(out)):
+    if regex.search(out.decode("utf-8")):
       return True
     return False
 
@@ -40,7 +40,7 @@ class VirtualBox:
     self._delete()
     if not os.path.isdir(self._basefolder):
       os.makedirs(self._basefolder)
-    print 'Create vm {0}'.format(self._name)
+    print('Create vm {0}'.format(self._name))
     self._vboxmanage('createvm --basefolder "{0}" --name "{1}" --ostype "{2}" --register'
                      .format(self._basefolder,
                              self._name,
@@ -55,12 +55,13 @@ class VirtualBox:
 
     hd_file = os.path.join(os.path.join(self._basefolder, self._name), self._name + '.vdi')
     self._vboxmanage('createhd --filename "{0}" --size 20480'.format(hd_file))
-    self._vboxmanage('storagectl "{0}" --name "SATA Controller" --add sata --controller IntelAhci --sataportcount 5'.format(self._name))
+    self._vboxmanage('storagectl "{0}" --name "SATA Controller" --add sata --controller IntelAhci --portcount 5'.format(self._name))
     self._vboxmanage('storageattach "{0}" --storagectl "SATA Controller" --port 0 --device 0 --type hdd --medium "{1}"'.format(self._name, hd_file))
     self._vboxmanage('storagectl "{0}" --name "IDE Controller" --add ide --controller PIIX4'.format(self._name))
 
   def startvm(self):
     self._vboxmanage('startvm "{0}"'.format(self._name))
+    self.wait_for_running()
 
   def stopvm(self):
     self._vboxmanage('controlvm "{0}" acpipowerbutton'.format(self._name))
@@ -76,9 +77,9 @@ class VirtualBox:
 
   def wait_for_shutdown(self):
     while self._running():
-      print '.',
+      print('.')
       time.sleep(5)
-    print
+    print()
 
   def forward_ssh(self, ssh_port):
     try:

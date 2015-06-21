@@ -5,7 +5,7 @@ import subprocess
 import shlex
 import os
 
-from virtualbox import VirtualBox
+from image.virtualbox import VirtualBox
 
 class VBoxImage:
   def __init__(self, config):
@@ -20,17 +20,17 @@ class VBoxImage:
 
 
   def setup(self):
-    print "Create virtual machine"
+    print("Create virtual machine")
     vbox = VirtualBox(self._config.vbox['name'], self._config.vbox_dir)
     vbox.createvm(self._config.vbox)
 
-    print "Install base image"
+    print("Install base image")
     vbox.insert_cd(self._config.patched_cd)
     vbox.startvm()
     vbox.wait_for_shutdown()
     vbox.remove_cd()
 
-    print "Install ssh key"
+    print("Install ssh key")
     ssh_port = 2222
     vbox.forward_ssh(ssh_port)
     vbox.startvm()
@@ -40,7 +40,7 @@ class VBoxImage:
     vbox.wait_for_shutdown()
 
   def package(self):
-    print "Package vagrant box"
+    print("Package vagrant box")
     vbox_name = self._config.vbox['name']
     vagrant_box = os.path.join(self._config.script_dir, self._config.vagrant_box)
     proc = subprocess.Popen(shlex.split('vagrant package --base "{0}" --output "{1}"'.format(vbox_name, vagrant_box)), stdout=subprocess.PIPE)
